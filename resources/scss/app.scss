@@ -1,0 +1,127 @@
+// Import Bootstrap
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+/* Chamunda Electrics Theme Enhancements */
+:root {
+    --ce-primary: #0f4c81;
+    --ce-primary-hover: #0a355c;
+    --ce-accent: #f59e0b;
+    --ce-accent-hover: #d97706;
+    --ce-dark: #1e293b;
+    --ce-light: #f8fafc;
+}
+
+body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f8fafc;
+    color: #1e293b;
+}
+
+.bg-ce-primary {
+    background-color: var(--ce-primary) !important;
+}
+
+.text-ce-primary {
+    color: var(--ce-primary) !important;
+}
+
+.bg-ce-accent {
+    background-color: var(--ce-accent) !important;
+}
+
+.text-ce-accent {
+    color: var(--ce-accent) !important;
+}
+
+.btn-ce-primary {
+    background-color: var(--ce-primary);
+    border-color: var(--ce-primary);
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.btn-ce-primary:hover, .btn-ce-primary:focus {
+    background-color: var(--ce-primary-hover);
+    border-color: var(--ce-primary-hover);
+    color: #ffffff;
+}
+
+.btn-ce-accent {
+    background-color: var(--ce-accent);
+    border-color: var(--ce-accent);
+    color: #1e293b;
+    font-weight: 600;
+}
+
+.btn-ce-accent:hover, .btn-ce-accent:focus {
+    background-color: var(--ce-accent-hover);
+    border-color: var(--ce-accent-hover);
+    color: #ffffff;
+}
+
+/* Product Card Styling */
+.product-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+}
+
+.product-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+}
+
+/* Navbar & Topbar */
+.navbar-brand-custom {
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.hero-banner {
+    background: linear-gradient(135deg, #0f4c81 0%, #1e293b 100%);
+    color: #ffffff;
+    border-radius: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.rating-stars {
+    color: #fbbf24;
+}
+
+/* Admin Dashboard Layout */
+.admin-sidebar {
+    min-height: calc(100vh - 56px);
+    background-color: #0f172a;
+}
+
+.admin-sidebar .nav-link {
+    color: #94a3b8;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+
+.admin-sidebar .nav-link:hover,
+.admin-sidebar .nav-link.active {
+    color: #ffffff;
+    background-color: #1e293b;
+}
+
+.stat-card {
+    border-radius: 0.75rem;
+    border: none;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+}

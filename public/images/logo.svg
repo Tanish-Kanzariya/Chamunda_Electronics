@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80">
+  <defs>
+    <linearGradient id="ceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f4c81"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="ceBolt" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+  <!-- Icon Badge -->
+  <rect x="10" y="10" width="60" height="60" rx="14" fill="url(#ceGrad)"/>
+  <!-- Lightning Bolt -->
+  <path d="M43 18 L26 44 L39 44 L35 62 L54 36 L41 36 Z" fill="url(#ceBolt)" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- Brand Text -->
+  <text x="82" y="38" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="900" fill="#0f4c81" letter-spacing="-0.5">CHAMUNDA</text>
+  <text x="82" y="58" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="800" fill="#f59e0b" letter-spacing="3.5">ELECTRICS</text>
+  <circle cx="215" cy="53" r="2.5" fill="#0f4c81"/>
+  <text x="224" y="58" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#64748b" letter-spacing="0.5">EST. 1998</text>
+</svg>
