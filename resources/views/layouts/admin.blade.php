@@ -103,6 +103,13 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('admin.banners.index') }}" class="nav-link {{ request()->routeIs('admin.banners.*') || request()->routeIs('admin.sliders.*') ? 'active' : '' }}">
+                        <i class="bi bi-sliders fs-5"></i> Hero Sliders
+                        @php $activeBannersCount = \App\Models\Banner::where('is_active', true)->count(); @endphp
+                        <span class="badge bg-secondary ms-auto">{{ $activeBannersCount }}</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('admin.customers.index') }}" class="nav-link {{ request()->routeIs('admin.customers.*') ? 'active' : '' }}">
                         <i class="bi bi-people fs-5"></i> Customers
                     </a>

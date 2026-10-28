@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b" />
+      <stop offset="45%" stop-color="#312e81" />
+      <stop offset="85%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="purpleGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c084fc" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+    <linearGradient id="amberGold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+    <filter id="shadow3" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#000000" flood-opacity="0.45" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="480" rx="24" fill="url(#bgGrad3)" />
+
+  <!-- Warm ambient light glow -->
+  <circle cx="950" cy="200" r="220" fill="#fef08a" opacity="0.08" />
+
+  <!-- Left Content -->
+  <g transform="translate(60, 60)">
+    <rect width="300" height="36" rx="18" fill="rgba(192, 132, 252, 0.15)" stroke="#c084fc" stroke-width="1.5" />
+    <circle cx="20" cy="18" r="6" fill="#c084fc" />
+    <text x="36" y="23" font-family="system-ui, sans-serif" font-size="12" font-weight="800" fill="#e9d5ff" letter-spacing="1">
+      5-STAR ENERGY SAVING LIVING
+    </text>
+
+    <text x="0" y="85" font-family="system-ui, sans-serif" font-size="44" font-weight="900" fill="#ffffff">
+      Smart BLDC Ceiling Fans
+    </text>
+    <text x="0" y="138" font-family="system-ui, sans-serif" font-size="44" font-weight="900" fill="url(#amberGold)">
+      &amp; Architectural LED Lights
+    </text>
+
+    <text x="0" y="185" font-family="system-ui, sans-serif" font-size="17" fill="#cbd5e1">
+      Save up to 65% on Electricity • Remote &amp; Timer Controlled • Whisper Quiet
+    </text>
+    <text x="0" y="210" font-family="system-ui, sans-serif" font-size="15" fill="#94a3b8">
+      Philips, Crompton Energion, Orient Electric, Havells with 3-Year Onsite Warranty.
+    </text>
+
+    <!-- Key Feature Badges -->
+    <g transform="translate(0, 245)">
+      <rect width="140" height="48" rx="10" fill="#2e1065" stroke="#6b21a8" stroke-width="1" />
+      <text x="16" y="22" font-family="system-ui, sans-serif" font-size="10" fill="#c084fc">POWER CONSUMPTION</text>
+      <text x="16" y="40" font-family="system-ui, sans-serif" font-size="16" font-weight="800" fill="#ffffff">Only 28W - 35W</text>
+
+      <g transform="translate(155, 0)">
+        <rect width="140" height="48" rx="10" fill="#2e1065" stroke="#6b21a8" stroke-width="1" />
+        <text x="16" y="22" font-family="system-ui, sans-serif" font-size="10" fill="#c084fc">ANNUAL SAVINGS</text>
+        <text x="16" y="40" font-family="system-ui, sans-serif" font-size="16" font-weight="800" fill="#4ade80">₹1,500 / Fan</text>
+      </g>
+
+      <g transform="translate(310, 0)">
+        <rect width="140" height="48" rx="10" fill="#2e1065" stroke="#6b21a8" stroke-width="1" />
+        <text x="16" y="22" font-family="system-ui, sans-serif" font-size="10" fill="#c084fc">WARRANTY</text>
+        <text x="16" y="40" font-family="system-ui, sans-serif" font-size="16" font-weight="800" fill="#facc15">3 Years Onsite</text>
+      </g>
+    </g>
+
+    <!-- Buttons -->
+    <g transform="translate(0, 325)">
+      <rect width="180" height="48" rx="24" fill="url(#amberGold)" filter="url(#shadow3)" />
+      <text x="35" y="30" font-family="system-ui, sans-serif" font-size="15" font-weight="800" fill="#0f172a">
+        Explore Fans ➔
+      </text>
+
+      <g transform="translate(200, 0)">
+        <rect width="180" height="48" rx="24" fill="rgba(255,255,255,0.08)" stroke="#a855f7" stroke-width="1.5" />
+        <text x="35" y="30" font-family="system-ui, sans-serif" font-size="15" font-weight="700" fill="#f8fafc">
+          LED Fixtures
+        </text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Right Visuals -->
+  <g transform="translate(780, 70)" filter="url(#shadow3)">
+    <!-- Fan Visual Card -->
+    <rect width="360" height="340" rx="20" fill="#ffffff" />
+    <circle cx="180" cy="150" r="110" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2" />
+    
+    <!-- Fan motor & blades -->
+    <circle cx="180" cy="150" r="34" fill="#0f172a" />
+    <circle cx="180" cy="150" r="16" fill="#fbbf24" />
+    
+    <!-- Blades -->
+    <path d="M 180 116 C 175 60, 185 40, 180 20 C 185 20, 195 40, 190 116 Z" fill="#334155" />
+    <path d="M 152 165 C 100 185, 80 190, 65 200 C 65 195, 75 180, 150 152 Z" fill="#334155" />
+    <path d="M 208 165 C 260 185, 280 190, 295 200 C 295 195, 285 180, 210 152 Z" fill="#334155" />
+
+    <!-- Feature Pill -->
+    <g transform="translate(40, 275)">
+      <rect width="280" height="45" rx="10" fill="#f1f5f9" />
+      <circle cx="25" cy="22" r="12" fill="#dcfce7" />
+      <path d="M 20 22 L 24 26 L 30 18" stroke="#16a34a" stroke-width="2" fill="none" />
+      <text x="45" y="27" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#0f172a">Smart Point-Anywhere Remote</text>
+    </g>
+  </g>
+</svg>

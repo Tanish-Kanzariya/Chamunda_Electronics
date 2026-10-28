@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,21 +14,14 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // If unauthenticated, auto-authenticate admin in local development so owner isn't locked out
+        // Must be logged in
         if (!Auth::check()) {
-            if (app()->environment('local')) {
-                $admin = User::where('role', 'admin')->first();
-                if ($admin) {
-                    Auth::login($admin);
-                    return $next($request);
-                }
-            }
-            return redirect()->route('login')->with('error', 'Access denied. Administrator privileges required.');
+            return redirect()->route('login')->with('error', 'Administrator authentication required.');
         }
 
-        // If logged in but not an admin
+        // Strictly verify admin role
         if (!Auth::user()->isAdmin()) {
-            return redirect()->route('home')->with('error', 'Access denied. Administrator privileges required.');
+            return redirect()->route('home')->with('error', 'Access Denied: You do not have administrator permissions.');
         }
 
         return $next($request);

@@ -2,41 +2,122 @@
 
 @section('title', 'Chamunda Electrics - Premium Electrical Goods & Industrial Supplies')
 
+@section('styles')
+<style>
+.hero-swiper-container {
+    width: 100%;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    box-shadow: 0 12px 30px -5px rgba(15, 76, 129, 0.2);
+    background: #071b30;
+}
+.hero-swiper {
+    width: 100%;
+    border-radius: 1.25rem;
+    overflow: hidden;
+}
+.hero-swiper .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    cursor: grab;
+}
+.hero-swiper .swiper-slide:active {
+    cursor: grabbing;
+}
+.hero-swiper .swiper-slide img {
+    width: 100%;
+    height: auto;
+    max-height: 480px;
+    min-height: 190px;
+    object-fit: cover;
+    display: block;
+    border-radius: 1.25rem;
+    transition: transform 0.4s ease;
+}
+.hero-swiper .swiper-slide:hover img {
+    transform: scale(1.006);
+}
+.hero-swiper .swiper-button-prev,
+.hero-swiper .swiper-button-next {
+    width: 48px;
+    height: 48px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(8px);
+    border-radius: 50%;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+    transition: all 0.25s ease;
+}
+.hero-swiper .swiper-button-prev:after,
+.hero-swiper .swiper-button-next:after {
+    font-size: 17px;
+    font-weight: 900;
+}
+.hero-swiper .swiper-button-prev:hover,
+.hero-swiper .swiper-button-next:hover {
+    background: var(--ce-accent);
+    color: #0f172a;
+    transform: scale(1.1);
+}
+.hero-swiper .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background: #ffffff;
+    opacity: 0.55;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hero-swiper .swiper-pagination-bullet-active {
+    width: 32px;
+    border-radius: 6px;
+    background: var(--ce-accent);
+    opacity: 1;
+}
+</style>
+@endsection
+
 @section('content')
-<!-- Hero Section -->
-<section class="py-4 py-lg-5">
+<!-- Hero Interactive Slider Section -->
+<section class="py-3 py-lg-4">
     <div class="container">
-        <div class="p-4 p-md-5 rounded-4 text-white position-relative overflow-hidden shadow" style="background: linear-gradient(135deg, #0b2545 0%, #0f4c81 50%, #1e293b 100%);">
-            <div class="row align-items-center position-relative" style="z-index: 2;">
-                <div class="col-lg-7">
-                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold mb-3">
-                        <i class="bi bi-lightning-charge-fill me-1"></i> Authorized Electrical Wholesale & Retail
-                    </span>
-                    <h1 class="display-5 fw-extrabold mb-3 lh-sm">
-                        Powering Homes, Projects & Industries with 100% Genuine Supplies
-                    </h1>
-                    <p class="lead text-light mb-4">
-                        Discover top-rated Polycab wires, Havells geysers, Anchor modular switches, Philips LED lighting, and BLDC energy-saving fans at wholesale direct rates.
-                    </p>
-                    <div class="d-flex flex-wrap gap-3">
-                        <a href="{{ route('shop.index') }}" class="btn btn-ce-accent btn-lg px-4 py-2 shadow-sm">
-                            <i class="bi bi-grid-3x3-gap-fill me-1"></i> Explore Catalog
-                        </a>
-                        <a href="{{ route('shop.index', ['sort' => 'price_low']) }}" class="btn btn-outline-light btn-lg px-4 py-2">
-                            <i class="bi bi-tag-fill me-1"></i> Special Offers
-                        </a>
+        @if(isset($banners) && $banners->count() > 0)
+            <div id="heroBannerCarousel" class="hero-swiper-container position-relative">
+                <div class="swiper hero-swiper">
+                    <div class="swiper-wrapper">
+                        @foreach($banners as $index => $banner)
+                            <div class="swiper-slide">
+                                <a href="{{ $banner->link_url ?: route('shop.index') }}" class="d-block w-100 text-decoration-none">
+                                    <img src="{{ $banner->image_url }}" class="img-fluid w-100" alt="{{ $banner->title ?? 'Chamunda Electrics Slide' }}">
+                                </a>
+                            </div>
+                        @endforeach
                     </div>
-                    <div class="mt-4 pt-3 border-top border-secondary d-flex flex-wrap gap-4 text-light small">
-                        <div><i class="bi bi-check-circle-fill text-warning me-1"></i> ISI Certified Quality</div>
-                        <div><i class="bi bi-check-circle-fill text-warning me-1"></i> Same-Day Dispatch</div>
-                        <div><i class="bi bi-check-circle-fill text-warning me-1"></i> Full Manufacturer Warranty</div>
-                    </div>
-                </div>
-                <div class="col-lg-5 text-center mt-4 mt-lg-0">
-                    <img src="{{ asset('images/products/crompton-energion-bldc-fan.svg') }}" alt="Electrical Appliance" class="img-fluid rounded-4 shadow-lg border border-secondary" style="max-height: 320px;">
+
+                    <!-- Slide Pagination Indicator Bullets -->
+                    <div class="swiper-pagination mb-2"></div>
+
+                    <!-- Slide Navigation Arrows -->
+                    <div class="swiper-button-prev ms-2"></div>
+                    <div class="swiper-button-next me-2"></div>
                 </div>
             </div>
-        </div>
+        @else
+            <!-- Fallback Static Hero if no sliders are active -->
+            <div id="heroBannerCarousel" class="p-4 p-md-5 rounded-4 text-white position-relative overflow-hidden shadow" style="background: linear-gradient(135deg, #0b2545 0%, #0f4c81 50%, #1e293b 100%);">
+                <div class="row align-items-center">
+                    <div class="col-lg-7">
+                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold mb-3">
+                            <i class="bi bi-lightning-charge-fill me-1"></i> Authorized Electrical Wholesale & Retail
+                        </span>
+                        <h1 class="display-5 fw-extrabold mb-3">Powering Homes, Projects & Industries</h1>
+                        <p class="lead text-light mb-4">Discover top-rated Polycab wires, Havells geysers, Anchor switches, and Philips lighting.</p>
+                        <a href="{{ route('shop.index') }}" class="btn btn-warning btn-lg px-4 py-2 text-dark fw-bold">Explore Catalog</a>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 </section>
 
@@ -256,3 +337,35 @@
     </div>
 </section>
 @endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    if (typeof Swiper !== 'undefined' && document.querySelector('.hero-swiper')) {
+        new Swiper('.hero-swiper', {
+            loop: true,
+            speed: 700,
+            effect: 'slide',
+            grabCursor: true,
+            autoplay: {
+                delay: 4500,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            keyboard: {
+                enabled: true,
+            },
+        });
+    }
+});
+</script>
+@endsection
+

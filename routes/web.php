@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\CouponController as AdminCouponController;
 use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
+use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 
 // Public Storefront Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -60,8 +61,8 @@ Route::middleware(['auth'])->prefix('my-account')->as('customer.')->group(functi
     Route::post('/wishlist/toggle', [CustomerController::class, 'toggleWishlist'])->name('wishlist.toggle');
 });
 
-// Admin Protected Routes
-Route::middleware(['admin'])->prefix('admin')->as('admin.')->group(function () {
+// Admin Protected Routes (Strict Authentication Required)
+Route::middleware(['auth', 'admin'])->prefix('admin')->as('admin.')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     // Products
@@ -89,6 +90,18 @@ Route::middleware(['admin'])->prefix('admin')->as('admin.')->group(function () {
     Route::get('/coupons', [AdminCouponController::class, 'index'])->name('coupons.index');
     Route::post('/coupons', [AdminCouponController::class, 'store'])->name('coupons.store');
     Route::delete('/coupons/{id}', [AdminCouponController::class, 'destroy'])->name('coupons.destroy');
+
+    // Hero Banners & Sliders
+    Route::get('/banners', [AdminBannerController::class, 'index'])->name('banners.index');
+    Route::get('/banners/create', [AdminBannerController::class, 'create'])->name('banners.create');
+    Route::post('/banners', [AdminBannerController::class, 'store'])->name('banners.store');
+    Route::get('/banners/{id}/edit', [AdminBannerController::class, 'edit'])->name('banners.edit');
+    Route::put('/banners/{id}', [AdminBannerController::class, 'update'])->name('banners.update');
+    Route::post('/banners/{id}/toggle', [AdminBannerController::class, 'toggle'])->name('banners.toggle');
+    Route::delete('/banners/{id}', [AdminBannerController::class, 'destroy'])->name('banners.destroy');
+
+    Route::get('/sliders', [AdminBannerController::class, 'index'])->name('sliders.index');
+    Route::get('/sliders/create', [AdminBannerController::class, 'create'])->name('sliders.create');
 
     // Customers & Inquiries
     Route::get('/customers', [AdminCustomerController::class, 'index'])->name('customers.index');

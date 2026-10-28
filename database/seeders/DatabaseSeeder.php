@@ -19,13 +19,13 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Users
         $admin = User::firstOrCreate(
-            ['email' => 'admin@chamundaelectrics.com'],
+            ['email' => 'mayurinakum@gmail.com'],
             [
-                'name' => 'Chamunda Admin',
-                'password' => Hash::make('password123'),
+                'name' => 'Mayuri Nakum (Admin)',
+                'password' => Hash::make('mayuri21'),
                 'role' => 'admin',
                 'phone' => '+91 98765 43210',
-                'address' => 'Shop No. 12-14, Shree Chamunda Complex, Station Road',
+                'address' => 'Chamunda Electrics Head Office',
                 'city' => 'Ahmedabad',
                 'state' => 'Gujarat',
                 'pincode' => '380001',
@@ -648,5 +648,47 @@ class DatabaseSeeder extends Seeder
                 ]
             );
         }
+
+        // 8. Seed Initial Hero Banners
+        $bannersData = [
+            [
+                'title' => 'Powering Your Projects with 100% Genuine Supplies',
+                'subtitle' => 'Polycab Wires • Havells Switchgear • Philips LED • BLDC Fans at direct wholesale pricing with GST invoice.',
+                'badge_text' => 'FESTIVE MEGA ELECTRICAL SALE',
+                'image_path' => 'images/banners/banner-mega-sale.svg',
+                'link_url' => '/shop',
+                'button_text' => 'Shop Mega Sale',
+                'sort_order' => 1,
+                'is_active' => true,
+            ],
+            [
+                'title' => 'Heavy-Duty Wires, Cables & Modular Switchgear',
+                'subtitle' => 'Polycab FR-LSH Copper Wires, Schneider MCBs, Finolex Submersible with bulk contractor rates.',
+                'badge_text' => 'INDUSTRIAL & CONTRACTOR GRADE',
+                'image_path' => 'images/banners/banner-cables-switchgear.svg',
+                'link_url' => '/category/wires-cables',
+                'button_text' => 'Order Bulk Wires',
+                'sort_order' => 2,
+                'is_active' => true,
+            ],
+            [
+                'title' => 'Smart BLDC Ceiling Fans & Architectural LED Lights',
+                'subtitle' => 'Save up to 65% on electricity with remote-controlled whisper quiet BLDC motors and 3-year onsite warranty.',
+                'badge_text' => '5-STAR ENERGY SAVING LIVING',
+                'image_path' => 'images/banners/banner-smart-fans-led.svg',
+                'link_url' => '/category/fans-ventilation',
+                'button_text' => 'Explore Smart Fans',
+                'sort_order' => 3,
+                'is_active' => true,
+            ],
+        ];
+
+        foreach ($bannersData as $bData) {
+            \App\Models\Banner::firstOrCreate(
+                ['image_path' => $bData['image_path']],
+                $bData
+            );
+        }
     }
 }
+

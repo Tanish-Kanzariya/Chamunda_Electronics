@@ -10,6 +10,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     
+    <!-- Swiper 11 Touch Slider CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
     <!-- Custom Theme Styling -->
     <style>
         :root {
@@ -176,6 +179,15 @@
                         </span>
                     @endif
                 </a>
+
+                <!-- Admin Direct Access Button -->
+                @auth
+                    @if(Auth::user()->isAdmin())
+                        <a href="{{ route('admin.dashboard') }}" class="btn btn-warning btn-sm fw-bold px-3 py-1 shadow-sm text-dark">
+                            <i class="bi bi-speedometer2 me-1"></i> Admin Panel
+                        </a>
+                    @endif
+                @endauth
 
                 <!-- User Account Dropdown -->
                 @auth
@@ -391,6 +403,8 @@
 
     <!-- Bootstrap 5 Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Swiper 11 Touch Slider JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     @yield('scripts')
 </body>
 </html>

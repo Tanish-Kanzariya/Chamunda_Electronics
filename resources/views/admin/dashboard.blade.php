@@ -9,6 +9,9 @@
         <small class="text-secondary">Welcome to Chamunda Electrics administrative management suite.</small>
     </div>
     <div class="d-flex gap-2">
+        <a href="{{ route('admin.banners.index') }}" class="btn btn-warning fw-semibold btn-sm text-dark">
+            <i class="bi bi-sliders me-1"></i> Hero Sliders
+        </a>
         <a href="{{ route('admin.products.create') }}" class="btn btn-primary fw-semibold btn-sm">
             <i class="bi bi-plus-circle me-1"></i> Add Product
         </a>

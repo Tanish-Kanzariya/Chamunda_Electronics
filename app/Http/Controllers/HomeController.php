@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Brand;
 use App\Models\Product;
+use App\Models\Banner;
 use App\Models\ContactMessage;
 use Illuminate\Http\Request;
 
@@ -12,6 +13,11 @@ class HomeController extends Controller
 {
     public function index()
     {
+        $banners = Banner::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+
         $categories = Category::where('is_active', true)
             ->withCount('products')
             ->orderBy('sort_order')
@@ -33,7 +39,7 @@ class HomeController extends Controller
 
         $brands = Brand::where('is_active', true)->take(9)->get();
 
-        return view('home', compact('categories', 'featuredProducts', 'latestDeals', 'brands'));
+        return view('home', compact('banners', 'categories', 'featuredProducts', 'latestDeals', 'brands'));
     }
 
     public function about()
