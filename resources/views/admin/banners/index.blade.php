@@ -6,7 +6,7 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h4 class="fw-bold mb-1">Storefront Hero Sliders</h4>
+        <h4 class="fw-bold mb-1">Storefront Hero Sliders & Banners</h4>
         <p class="text-muted small mb-0">Customize and manage interactive promotional slides displayed in the storefront hero slider.</p>
     </div>
     <div class="d-flex gap-2">

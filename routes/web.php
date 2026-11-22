@@ -37,6 +37,14 @@ Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear')
 Route::post('/cart/apply-coupon', [CartController::class, 'applyCoupon'])->name('cart.apply-coupon');
 Route::post('/cart/remove-coupon', [CartController::class, 'removeCoupon'])->name('cart.remove-coupon');
 
+// Buy Now Routes
+Route::post('/buy-now', [CheckoutController::class, 'buyNow'])->name('buy.now');
+Route::get('/buy-now/{id}', [CheckoutController::class, 'buyNowGet'])->name('buy.now.get');
+Route::get('/checkout/cancel-buy-now', [CheckoutController::class, 'cancelBuyNow'])->name('checkout.cancel-buy-now');
+
+// Wishlist Global Toggle (handles auth & guests)
+Route::post('/wishlist/toggle', [CustomerController::class, 'toggleWishlist'])->name('customer.wishlist.toggle');
+
 // Checkout Routes
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');

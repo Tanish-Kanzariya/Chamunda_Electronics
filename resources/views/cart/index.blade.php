@@ -25,9 +25,9 @@
                                 <tr>
                                     <th style="min-width: 250px;">Product</th>
                                     <th>Price</th>
-                                    <th style="min-width: 140px;">Quantity</th>
+                                    <th style="min-width: 130px;">Quantity</th>
                                     <th>Subtotal</th>
-                                    <th></th>
+                                    <th class="text-end pe-3" style="min-width: 170px;">Checkout / Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,18 +56,29 @@
                                             </form>
                                         </td>
                                         <td class="fw-bold text-ce-primary">₹{{ number_format($item['price'] * $item['quantity'], 2) }}</td>
-                                        <td>
-                                            <form action="{{ route('cart.remove') }}" method="POST">
-                                                @csrf
-                                                <input type="hidden" name="product_id" value="{{ $item['id'] }}">
-                                                <button type="submit" class="btn btn-sm text-danger" title="Remove Item">
-                                                    <i class="bi bi-trash3-fill"></i>
-                                                </button>
-                                            </form>
+                                        <td class="text-end text-nowrap pe-3">
+                                            <div class="d-flex align-items-center justify-content-end gap-2">
+                                                <form action="{{ route('buy.now') }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    <input type="hidden" name="product_id" value="{{ $item['id'] }}">
+                                                    <input type="hidden" name="quantity" value="{{ $item['quantity'] }}">
+                                                    <button type="submit" class="btn btn-sm btn-warning fw-bold text-dark text-nowrap shadow-sm" title="Checkout this item only">
+                                                        <i class="bi bi-lightning-charge-fill me-1"></i> Buy This Now
+                                                    </button>
+                                                </form>
+                                                <form action="{{ route('cart.remove') }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    <input type="hidden" name="product_id" value="{{ $item['id'] }}">
+                                                    <button type="submit" class="btn btn-sm text-danger p-1" title="Remove Item">
+                                                        <i class="bi bi-trash3-fill fs-6"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
+
                         </table>
                     </div>
                 </div>
@@ -147,7 +158,7 @@
                     </div>
 
                     <a href="{{ route('checkout.index') }}" class="btn btn-ce-primary btn-lg w-100 fw-bold shadow-sm">
-                        Proceed to Checkout <i class="bi bi-arrow-right ms-1"></i>
+                        Proceed to Checkout (All {{ count($cart) }} Items) <i class="bi bi-arrow-right ms-1"></i>
                     </a>
 
                     <div class="text-center mt-3 small text-muted">

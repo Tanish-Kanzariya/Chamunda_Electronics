@@ -110,7 +110,17 @@
             border-radius: 4px;
             font-weight: 700;
         }
+        @keyframes heartPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.35); }
+            100% { transform: scale(1); }
+        }
+        .heart-pulse i {
+            display: inline-block;
+            animation: heartPulse 0.35s ease-in-out;
+        }
     </style>
+
     @yield('styles')
 </head>
 <body>
@@ -401,10 +411,107 @@
         </div>
     </footer>
 
+    <!-- Global Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1090;">
+        <div id="globalAppToast" class="toast align-items-center border-0 shadow-lg rounded-4" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex p-2">
+                <div class="toast-body d-flex align-items-center">
+                    <i id="globalToastIcon" class="bi bi-check-circle-fill text-success fs-5 me-2"></i>
+                    <span id="globalToastMessage" class="fw-semibold">Action completed</span>
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap 5 Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Swiper 11 Touch Slider JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Global App Scripts: Wishlist Toggle & Feedback -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Global Wishlist AJAX Toggle Handler
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.btn-wishlist-toggle');
+            if (!btn) return;
+            e.preventDefault();
+
+            const productId = btn.getAttribute('data-product-id');
+            if (!productId) return;
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+            fetch('{{ route("customer.wishlist.toggle") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: JSON.stringify({ product_id: productId })
+            })
+            .then(response => {
+                if (response.status === 401) {
+                    window.location.href = '{{ route("login") }}';
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data) return;
+                if (data.success) {
+                    // Update all wishlist buttons on the page for this product
+                    document.querySelectorAll(`.btn-wishlist-toggle[data-product-id="${productId}"]`).forEach(b => {
+                        const icon = b.querySelector('i');
+                        if (icon) {
+                            if (data.is_wishlisted) {
+                                icon.className = 'bi bi-heart-fill text-danger ' + (icon.className.includes('fs-5') ? 'fs-5' : 'fs-6');
+                                b.classList.add('heart-pulse');
+                                setTimeout(() => b.classList.remove('heart-pulse'), 400);
+                            } else {
+                                icon.className = 'bi bi-heart text-danger ' + (icon.className.includes('fs-5') ? 'fs-5' : 'fs-6');
+                            }
+                        }
+                    });
+
+                    // Update header wishlist badge count
+                    const badge = document.getElementById('wishlistCountBadge');
+                    if (badge) {
+                        badge.textContent = data.count;
+                        badge.style.display = data.count > 0 ? 'inline-block' : 'none';
+                    }
+
+                    // Show toast feedback
+                    showToast(data.message, data.is_wishlisted ? 'success' : 'info');
+                }
+            })
+            .catch(err => {
+                console.error('Wishlist error:', err);
+            });
+        });
+
+        // Global Toast Notification Helper
+        window.showToast = function(message, type = 'success') {
+            const toastEl = document.getElementById('globalAppToast');
+            if (!toastEl) return;
+            const msgEl = document.getElementById('globalToastMessage');
+            const iconEl = document.getElementById('globalToastIcon');
+            if (msgEl) msgEl.textContent = message;
+            if (iconEl) {
+                iconEl.className = type === 'success' 
+                    ? 'bi bi-check-circle-fill text-success fs-5 me-2' 
+                    : 'bi bi-info-circle-fill text-primary fs-5 me-2';
+            }
+            const toast = new bootstrap.Toast(toastEl, { delay: 3500 });
+            toast.show();
+        };
+    });
+    </script>
+
     @yield('scripts')
 </body>
 </html>
+

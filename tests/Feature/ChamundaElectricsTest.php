@@ -87,12 +87,13 @@ class ChamundaElectricsTest extends TestCase
 
         $bannersRes = $this->actingAs($admin)->get('/admin/banners');
         $bannersRes->assertStatus(200);
-        $bannersRes->assertSee('Storefront Hero Banners');
+        $bannersRes->assertSee('Storefront Hero');
     }
 
     public function test_admin_can_manage_hero_banners(): void
     {
         $admin = User::where('email', 'mayurinakum@gmail.com')->first();
+        \App\Models\Banner::where('title', 'Special Contractor Discount Weekend')->delete();
 
         // 1. Create a banner
         $response = $this->actingAs($admin)->post('/admin/banners', [
@@ -124,5 +125,92 @@ class ChamundaElectricsTest extends TestCase
         $response->assertSee('heroBannerCarousel');
         $response->assertSee('banner-mega-sale.svg');
     }
+
+    public function test_product_detail_has_buy_now_button_and_wishlist_heart(): void
+    {
+        $product = Product::first();
+        $response = $this->get('/product/' . $product->slug);
+        $response->assertStatus(200);
+        $response->assertSee('Buy Now');
+        $response->assertSee('btn-wishlist-toggle');
+    }
+
+    public function test_wishlist_toggle_ajax_fills_heart(): void
+    {
+        $customer = User::where('email', 'customer@example.com')->first();
+        $product = Product::first();
+
+        // 1. Add to wishlist
+        $response = $this->actingAs($customer)->postJson('/wishlist/toggle', [
+            'product_id' => $product->id,
+        ]);
+        $response->assertStatus(200);
+        $response->assertJson([
+            'success' => true,
+            'is_wishlisted' => true,
+            'action' => 'added',
+        ]);
+
+        // 2. Remove from wishlist
+        $response2 = $this->actingAs($customer)->postJson('/wishlist/toggle', [
+            'product_id' => $product->id,
+        ]);
+        $response2->assertStatus(200);
+        $response2->assertJson([
+            'success' => true,
+            'is_wishlisted' => false,
+            'action' => 'removed',
+        ]);
+    }
+
+    public function test_buy_now_direct_checkout_particular_product(): void
+    {
+        $product = Product::first();
+        $customer = User::where('email', 'customer@example.com')->first();
+
+        // Put a dummy item in regular cart first to ensure Buy Now doesn't wipe it
+        $this->withSession(['cart' => [
+            999 => [
+                'id' => 999,
+                'name' => 'Saved In Cart Item',
+                'price' => 100,
+                'quantity' => 1,
+                'image' => null,
+            ]
+        ]]);
+
+        // Instant Buy Now
+        $buyNowRes = $this->actingAs($customer)->post('/buy-now', [
+            'product_id' => $product->id,
+            'quantity' => 1,
+        ]);
+        $buyNowRes->assertRedirect(route('checkout.index', ['direct' => 1]));
+
+        // View checkout in Buy Now mode
+        $checkoutView = $this->actingAs($customer)->get('/checkout');
+        $checkoutView->assertStatus(200);
+        $checkoutView->assertSee('Instant 1-Click Buy Now Mode');
+        $checkoutView->assertSee($product->name);
+
+        // Submit order with real-world details
+        $processRes = $this->actingAs($customer)->post('/checkout', [
+            'customer_name' => 'Rahul Patel',
+            'customer_email' => 'customer@example.com',
+            'customer_phone' => '9876543210',
+            'shipping_address' => 'Shop 4, Shree Complex, Station Road',
+            'landmark' => 'Opposite SBI Bank',
+            'city' => 'Ahmedabad',
+            'state' => 'Gujarat',
+            'pincode' => '380001',
+            'address_type' => 'commercial_site',
+            'payment_method' => 'cod',
+            'is_buy_now' => 1,
+        ]);
+        $processRes->assertRedirect();
+        
+        // Assert regular cart was preserved!
+        $this->assertTrue(session()->has('cart'));
+    }
 }
+
 

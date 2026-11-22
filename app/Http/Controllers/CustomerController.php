@@ -97,6 +97,18 @@ class CustomerController extends Controller
 
     public function toggleWishlist(Request $request)
     {
+        if (!Auth::check()) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'authenticated' => false,
+                    'redirect' => route('login'),
+                    'message' => 'Please sign in to save items to your wishlist.',
+                ], 401);
+            }
+            return redirect()->route('login')->with('info', 'Please sign in to save items to your wishlist.');
+        }
+
         $productId = $request->input('product_id');
         $user = Auth::user();
 
@@ -105,6 +117,7 @@ class CustomerController extends Controller
         if ($exists) {
             $exists->delete();
             $action = 'removed';
+            $isWishlisted = false;
             $message = 'Product removed from your wishlist.';
         } else {
             Wishlist::create([
@@ -112,13 +125,16 @@ class CustomerController extends Controller
                 'product_id' => $productId,
             ]);
             $action = 'added';
+            $isWishlisted = true;
             $message = 'Product saved to your wishlist!';
         }
 
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'success' => true,
+                'authenticated' => true,
                 'action' => $action,
+                'is_wishlisted' => $isWishlisted,
                 'message' => $message,
                 'count' => Wishlist::where('user_id', $user->id)->count(),
             ]);
@@ -127,3 +143,4 @@ class CustomerController extends Controller
         return back()->with('success', $message);
     }
 }
+

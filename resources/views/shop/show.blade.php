@@ -20,7 +20,15 @@
         <div class="row g-4 g-lg-5">
             <!-- Product Image -->
             <div class="col-lg-5 text-center">
-                <div class="p-4 bg-light rounded-4 border d-flex justify-content-center align-items-center" style="min-height: 380px;">
+                <div class="p-4 bg-light rounded-4 border d-flex justify-content-center align-items-center position-relative" style="min-height: 380px;">
+                    @if($product->discount_percentage)
+                        <span class="badge-discount position-absolute top-0 start-0 m-3">
+                            {{ $product->discount_percentage }}% OFF
+                        </span>
+                    @endif
+                    <button type="button" class="btn btn-white btn-sm rounded-circle shadow-sm btn-wishlist-toggle position-absolute top-0 end-0 m-3 p-2 bg-white" data-product-id="{{ $product->id }}" title="Wishlist">
+                        <i class="bi {{ in_array($product->id, $userWishlistIds ?? []) ? 'bi-heart-fill text-danger' : 'bi-heart' }} fs-5"></i>
+                    </button>
                     <img src="{{ asset($product->image ?? 'images/products/polycab-flamegard-wire.svg') }}" alt="{{ $product->name }}" class="img-fluid" style="max-height: 340px; object-fit: contain;">
                 </div>
             </div>
@@ -64,39 +72,51 @@
                     {{ $product->short_description }}
                 </p>
 
-                <!-- Add to Cart Form -->
+                <!-- Actions: Add to Cart & Buy Now -->
                 @if($product->in_stock)
-                    <form action="{{ route('cart.add') }}" method="POST" class="mb-4">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <div class="row g-3 align-items-center">
-                            <div class="col-sm-3 col-4">
+                    <div class="mb-4">
+                        <div class="row g-2 align-items-end">
+                            <div class="col-sm-3 col-12 mb-2 mb-sm-0">
                                 <label class="form-label small fw-bold mb-1">Quantity</label>
-                                <input type="number" name="quantity" value="1" min="1" max="{{ $product->stock_quantity }}" class="form-control text-center fw-bold">
+                                <div class="input-group">
+                                    <button class="btn btn-outline-secondary btn-sm px-2" type="button" onclick="adjustProductQty(-1)">-</button>
+                                    <input type="number" id="detailProductQty" value="1" min="1" max="{{ $product->stock_quantity }}" class="form-control form-control-sm text-center fw-bold">
+                                    <button class="btn btn-outline-secondary btn-sm px-2" type="button" onclick="adjustProductQty(1)">+</button>
+                                </div>
                             </div>
-                            <div class="col-sm-5 col-8 pt-sm-4">
-                                <button type="submit" class="btn btn-ce-primary w-100 py-2 fw-bold">
-                                    <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                            <div class="col-sm-4 col-6">
+                                <form action="{{ route('cart.add') }}" method="POST" id="addToCartForm">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="quantity" id="cartQtyInput" value="1">
+                                    <button type="submit" class="btn btn-ce-primary w-100 py-2 fw-bold shadow-sm">
+                                        <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="col-sm-4 col-6">
+                                <form action="{{ route('buy.now') }}" method="POST" id="buyNowForm">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="quantity" id="buyNowQtyInput" value="1">
+                                    <button type="submit" class="btn btn-warning w-100 py-2 fw-bold text-dark shadow-sm">
+                                        <i class="bi bi-lightning-charge-fill me-1"></i> Buy Now
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="col-sm-1 col-12 text-center text-sm-start mt-2 mt-sm-0">
+                                <button type="button" class="btn btn-outline-danger p-2 rounded-3 btn-wishlist-toggle w-100" data-product-id="{{ $product->id }}" title="Save to Wishlist">
+                                    <i class="bi {{ in_array($product->id, $userWishlistIds ?? []) ? 'bi-heart-fill text-danger' : 'bi-heart' }} fs-5"></i>
                                 </button>
                             </div>
-                            @auth
-                                <div class="col-sm-4 pt-sm-4">
-                                    <form action="{{ route('customer.wishlist.toggle') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <button type="submit" class="btn btn-outline-danger w-100 py-2 fw-semibold">
-                                            <i class="bi bi-heart me-1"></i> Wishlist
-                                        </button>
-                                    </form>
-                                </div>
-                            @endauth
                         </div>
-                    </form>
+                    </div>
                 @else
                     <div class="alert alert-warning mb-4">
                         <i class="bi bi-info-circle me-1"></i> This item is currently out of stock. Contact our store team to reserve next dispatch.
                     </div>
                 @endif
+
 
                 <!-- Store Highlights -->
                 <div class="row g-2 pt-3 border-top small text-secondary">
@@ -236,3 +256,31 @@
     @endif
 </div>
 @endsection
+
+@section('scripts')
+<script>
+function adjustProductQty(change) {
+    const qtyInput = document.getElementById('detailProductQty');
+    const cartInput = document.getElementById('cartQtyInput');
+    const buyNowInput = document.getElementById('buyNowQtyInput');
+    if (!qtyInput) return;
+    let current = parseInt(qtyInput.value) || 1;
+    let min = parseInt(qtyInput.getAttribute('min')) || 1;
+    let max = parseInt(qtyInput.getAttribute('max')) || 999;
+    
+    let newQty = Math.max(min, Math.min(max, current + change));
+    qtyInput.value = newQty;
+    if (cartInput) cartInput.value = newQty;
+    if (buyNowInput) buyNowInput.value = newQty;
+}
+
+document.getElementById('detailProductQty')?.addEventListener('input', function() {
+    const cartInput = document.getElementById('cartQtyInput');
+    const buyNowInput = document.getElementById('buyNowQtyInput');
+    let val = Math.max(1, parseInt(this.value) || 1);
+    if (cartInput) cartInput.value = val;
+    if (buyNowInput) buyNowInput.value = val;
+});
+</script>
+@endsection
+

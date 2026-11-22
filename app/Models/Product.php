@@ -101,4 +101,19 @@ class Product extends Model
     {
         return (int) $this->reviews()->count();
     }
+
+    public function wishlists(): HasMany
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function getIsWishlistedAttribute(): bool
+    {
+        $userId = \Illuminate\Support\Facades\Auth::id();
+        if (!$userId) {
+            return false;
+        }
+        return $this->wishlists()->where('user_id', $userId)->exists();
+    }
 }
+

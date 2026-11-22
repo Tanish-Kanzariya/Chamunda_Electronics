@@ -144,15 +144,9 @@
                                     </span>
                                 @endif
 
-                                @auth
-                                    <form action="{{ route('customer.wishlist.toggle') }}" method="POST" class="position-absolute top-0 end-0 m-3">
-                                        @csrf
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <button type="submit" class="btn btn-light btn-sm rounded-circle shadow-sm" title="Add to Wishlist">
-                                            <i class="bi bi-heart text-danger"></i>
-                                        </button>
-                                    </form>
-                                @endauth
+                                <button type="button" class="btn btn-white btn-sm rounded-circle shadow-sm position-absolute top-0 end-0 m-3 btn-wishlist-toggle p-2 bg-white" data-product-id="{{ $product->id }}" title="{{ in_array($product->id, $userWishlistIds ?? []) ? 'Remove from Wishlist' : 'Add to Wishlist' }}">
+                                    <i class="bi {{ in_array($product->id, $userWishlistIds ?? []) ? 'bi-heart-fill text-danger' : 'bi-heart' }} fs-6"></i>
+                                </button>
 
                                 <!-- Product Thumbnail -->
                                 <a href="{{ route('product.show', $product->slug) }}" class="d-block text-center mb-3">
@@ -182,19 +176,34 @@
                                     </div>
 
                                     @if($product->in_stock)
-                                        <form action="{{ route('cart.add') }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                            <input type="hidden" name="quantity" value="1">
-                                            <button type="submit" class="btn btn-ce-primary w-100 fw-semibold">
-                                                <i class="bi bi-cart-plus me-1"></i> Add to Cart
-                                            </button>
-                                        </form>
+                                        <div class="row g-2">
+                                            <div class="col-6">
+                                                <form action="{{ route('cart.add') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                    <input type="hidden" name="quantity" value="1">
+                                                    <button type="submit" class="btn btn-outline-primary btn-sm w-100 fw-semibold" title="Add to Cart">
+                                                        <i class="bi bi-cart-plus me-1"></i> Cart
+                                                    </button>
+                                                </form>
+                                            </div>
+                                            <div class="col-6">
+                                                <form action="{{ route('buy.now') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                    <input type="hidden" name="quantity" value="1">
+                                                    <button type="submit" class="btn btn-warning btn-sm w-100 fw-bold text-dark shadow-sm" title="Instant Buy Now">
+                                                        <i class="bi bi-lightning-charge-fill me-1"></i> Buy Now
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     @else
-                                        <button class="btn btn-secondary w-100 disabled" disabled>Out of Stock</button>
+                                        <button class="btn btn-secondary btn-sm w-100 disabled" disabled>Out of Stock</button>
                                     @endif
                                 </div>
                             </div>
+
                         </div>
                     @endforeach
                 </div>
